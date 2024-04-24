@@ -73,7 +73,7 @@ export const forms = {
       type: "starRating",
       label: "Rate Us",
       options: { maxRating: 5, precision: 0.5 },
-      validation: { required: true },
+      validations: { required: true },
     },
   ],
 
@@ -122,6 +122,7 @@ export const forms = {
       type: "buttonGroup",
       label: "Hobbies",
       values: ["Sports", "Indoor Games", "Tech", "Music", "Fitness", "Art"],
+      validations: { required: true },
     },
     {
       type: "select",
@@ -132,7 +133,7 @@ export const forms = {
     {
       type: "switch",
       label: "Agree to Terms and Conditions",
-      validations: { requried: true },
+      validations: { required: true },
     },
   ],
 

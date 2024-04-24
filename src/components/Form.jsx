@@ -16,8 +16,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Checkbox from "@mui/material/Checkbox";
 
+import PaperCard from "./PaperCard";
+
 const Form = ({ formConfig }) => {
   const [formData, setFormData] = useState({});
+  const [errors, setErrors] = useState({});
+  const [display, setDisplay] = useState(false);
 
   const handleChange = (e, type, key, subVal = null) => {
     let value;
@@ -42,6 +46,37 @@ const Form = ({ formConfig }) => {
     }
 
     setFormData({ ...formData, [key]: value });
+    validateField(key, value);
+  };
+
+  const validateField = (key, value) => {
+    const element = formConfig.find((el) => el.label === key);
+    const { validations } = element;
+    let errorMsg;
+
+    if (formData[key]?.length === 0) {
+      errorMsg = "This field is required";
+    }
+
+    if (validations) {
+      if (value === undefined || (validations?.required && !value)) {
+        errorMsg = "This field is required";
+      } else if (
+        validations?.minLength &&
+        value.length < validations.minLength
+      ) {
+        errorMsg = `Minimum length is ${validations.minLength}`;
+      } else if (
+        validations?.maxLength &&
+        value.length > validations.maxLength
+      ) {
+        errorMsg = `Maximum length is ${validations.maxLength}`;
+      } else if (validations?.pattern && !validations.pattern.test(value)) {
+        errorMsg = "Invalid Format";
+      }
+    }
+
+    setErrors((prevErrors) => ({ ...prevErrors, [key]: errorMsg || "" }));
   };
 
   const renderFormElement = (element) => {
@@ -154,38 +189,69 @@ const Form = ({ formConfig }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    formConfig.forEach((element) => {
+      validateField(element.label, formData[element.label]);
+    });
+
+    setTimeout(() => {
+      let isValidForm = true;
+      for (const key in errors) {
+        if (errors[key]) {
+          isValidForm = false;
+          break;
+        }
+      }
+      if (isValidForm) {
+        const formDataNotEmpty = Object.values(formData).some(
+          (val) => val === ""
+        );
+        if (formDataNotEmpty) {
+          setDisplay(true);
+        }
+      }
+    }, 1000);
   };
 
   useEffect(() => {
     setFormData({});
+    setErrors({});
+    setDisplay(false);
   }, [formConfig]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
-        {formConfig.map((element, idx) => (
-          <React.Fragment key={idx}>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="subtitle1">{element.label}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              {renderFormElement(element)}
-            </Grid>
-          </React.Fragment>
-        ))}
-        <Button
-          variant="contained"
-          fullWidth
-          sx={{ marginTop: 5 }}
-          type="submit"
-        >
-          <Typography variant="button" fontWeight={900}>
-            Submit
-          </Typography>
-        </Button>
-      </Grid>
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          {formConfig.map((element, idx) => (
+            <React.Fragment key={idx}>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="subtitle1">{element.label}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                {renderFormElement(element)}
+                {errors?.[element?.label] && (
+                  <Typography color="red" variant="caption">
+                    {errors[element.label]}
+                  </Typography>
+                )}
+              </Grid>
+            </React.Fragment>
+          ))}
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ marginTop: 5 }}
+            type="submit"
+          >
+            <Typography variant="button" fontWeight={900}>
+              Submit
+            </Typography>
+          </Button>
+        </Grid>
+      </form>
+      {display && <PaperCard formData={formData} />}
+    </>
   );
 };
 
