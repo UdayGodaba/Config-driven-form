@@ -21,6 +21,7 @@ import PaperCard from "./PaperCard";
 const Form = ({ formConfig }) => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
+  const [check, setCheck] = useState(false);
   const [display, setDisplay] = useState(false);
 
   const handleChange = (e, type, key, subVal = null) => {
@@ -194,24 +195,21 @@ const Form = ({ formConfig }) => {
       validateField(element.label, formData[element.label]);
     });
 
-    setTimeout(() => {
-      let isValidForm = true;
-      for (const key in errors) {
-        if (errors[key]) {
-          isValidForm = false;
-          break;
-        }
-      }
-      if (isValidForm) {
-        const formDataNotEmpty = Object.values(formData).some(
-          (val) => val === ""
-        );
-        if (formDataNotEmpty) {
-          setDisplay(true);
-        }
-      }
-    }, 1000);
+    setCheck(true);
   };
+
+  if (check) {
+    let isValidForm = true;
+    for (const key in errors) {
+      if (errors[key]) {
+        isValidForm = false;
+        break;
+      }
+    }
+    if (isValidForm) setDisplay(true);
+
+    setCheck(false);
+  }
 
   useEffect(() => {
     setFormData({});
