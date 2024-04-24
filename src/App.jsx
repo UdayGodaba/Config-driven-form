@@ -10,10 +10,13 @@ import Typography from "@mui/material/Typography";
 
 function App() {
   const [formType, setFormType] = useState("Contact Form");
-  const handleChange = (e) => setFormType(e.target.value);
+
+  const handleChange = (e) => {
+    setFormType(e.target.value);
+  };
 
   return (
-    <Grid container spacing={3} sx={{ padding: 5 }}>
+    <Grid container spacing={3} sx={{ padding: 5, maxWidth: 750 }}>
       <Grid item xs={12}>
         <Select value={formType} onChange={handleChange}>
           {Object.keys(forms).map((formKey, idx) => (

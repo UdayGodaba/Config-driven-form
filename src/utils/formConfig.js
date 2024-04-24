@@ -32,14 +32,12 @@ export const forms = {
     {
       type: "checkBox",
       label: "Worked On",
-      options: { defaultValue: "Frontend" },
-      values: ["Frontend", "Backend", "Devops", "AI/ML"],
+      values: ["Frontend", "Backend", "Devops", "AI/ML", "None"],
       validations: { required: true },
     },
     {
       type: "select",
       label: "City",
-      options: { defaultValue: "Hyderabad" },
       values: ["Hyderabad", "Banglore", "Mumbai", "Other"],
       validations: { required: true },
     },
@@ -66,7 +64,7 @@ export const forms = {
       },
     },
     {
-      type: "textArea",
+      type: "textField",
       label: "Comment",
       options: { minRows: 5, placeHolder: "Please Provide Feedback" },
       validations: { required: true, minLength: 10 },
@@ -74,7 +72,7 @@ export const forms = {
     {
       type: "starRating",
       label: "Rate Us",
-      options: { defaultValue: 4, maxRating: 5 },
+      options: { maxRating: 5, precision: 0.5 },
       validation: { required: true },
     },
   ],
@@ -117,7 +115,6 @@ export const forms = {
     {
       type: "radioButton",
       label: "Gender",
-      options: { defaultValue: "Male" },
       values: ["Male", "Female", "Don't want to specify"],
       validations: { required: true },
     },
@@ -129,7 +126,6 @@ export const forms = {
     {
       type: "select",
       label: "Branch",
-      options: { defaultValue: "CSE" },
       values: ["CSE", "EEE", "ECE", "MECH", "IT", "CIVIL"],
       validations: { required: true },
     },
