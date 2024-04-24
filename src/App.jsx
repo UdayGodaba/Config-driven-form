@@ -16,7 +16,14 @@ function App() {
   };
 
   return (
-    <Grid container spacing={3} sx={{ padding: 5, maxWidth: 750 }}>
+    <Grid
+      container
+      spacing={3}
+      sx={{
+        padding: 5,
+        maxWidth: 750,
+      }}
+    >
       <Grid item xs={12}>
         <Select value={formType} onChange={handleChange}>
           {Object.keys(forms).map((formKey, idx) => (

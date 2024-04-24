@@ -38,7 +38,7 @@ export const forms = {
     {
       type: "select",
       label: "City",
-      values: ["Hyderabad", "Banglore", "Mumbai", "Other"],
+      values: ["Hyderabad", "Bengaluru", "Mumbai", "Other"],
       validations: { required: true },
     },
     { type: "switch", label: "Get Notified", validations: { required: true } },

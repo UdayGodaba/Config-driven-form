@@ -19,33 +19,33 @@ import Checkbox from "@mui/material/Checkbox";
 const Form = ({ formConfig }) => {
   const [formData, setFormData] = useState({});
 
-  const renderFormElement = (element) => {
-    const { type, label, options, validations, values } = element;
-
-    const handleChange = (e, key, subVal = null) => {
-      let value;
-      if (type === "switch") {
-        value = e.target.checked;
-      } else if (type === "datePicker") {
-        value = e.toString().slice(0, 15);
-      } else if (type === "checkBox" || type === "buttonGroup") {
-        if (formData[key]) {
-          if (formData[key].includes(subVal)) {
-            formData[key].splice(formData[key].indexOf(subVal), 1);
-            value = formData[key];
-          } else {
-            formData[key].push(subVal);
-            value = formData[key];
-          }
+  const handleChange = (e, type, key, subVal = null) => {
+    let value;
+    if (type === "switch") {
+      value = e.target.checked;
+    } else if (type === "datePicker") {
+      value = e.toString().slice(0, 15);
+    } else if (type === "checkBox" || type === "buttonGroup") {
+      if (formData[key]) {
+        if (formData[key].includes(subVal)) {
+          formData[key].splice(formData[key].indexOf(subVal), 1);
+          value = formData[key];
         } else {
-          value = [subVal];
+          formData[key].push(subVal);
+          value = formData[key];
         }
       } else {
-        value = e.target.value;
+        value = [subVal];
       }
+    } else {
+      value = e.target.value;
+    }
 
-      setFormData({ ...formData, [key]: value });
-    };
+    setFormData({ ...formData, [key]: value });
+  };
+
+  const renderFormElement = (element) => {
+    const { type, label, options, values } = element;
 
     switch (type) {
       case "textField":
@@ -55,7 +55,7 @@ const Form = ({ formConfig }) => {
             variant="outlined"
             autoComplete="off"
             value={formData[label] || ""}
-            onChange={(e) => handleChange(e, label)}
+            onChange={(e) => handleChange(e, type, label)}
             multiline
             minRows={options?.minRows}
             fullWidth
@@ -65,7 +65,7 @@ const Form = ({ formConfig }) => {
         return (
           <Select
             value={formData[label] || label}
-            onChange={(e) => handleChange(e, label)}
+            onChange={(e) => handleChange(e, type, label)}
           >
             <MenuItem value={label} disabled>
               {label}
@@ -78,12 +78,12 @@ const Form = ({ formConfig }) => {
           </Select>
         );
       case "switch":
-        return <Switch onChange={(e) => handleChange(e, label)} />;
+        return <Switch onChange={(e) => handleChange(e, type, label)} />;
       case "radioButton":
         return (
           <RadioGroup
             value={formData[label] || ""}
-            onChange={(e) => handleChange(e, label)}
+            onChange={(e) => handleChange(e, type, label)}
           >
             {values.map((value, idx) => (
               <FormControlLabel
@@ -101,7 +101,7 @@ const Form = ({ formConfig }) => {
             name="half-rating"
             precision={options?.precision}
             max={options?.maxRating}
-            onChange={(e) => handleChange(e, label)}
+            onChange={(e) => handleChange(e, type, label)}
           />
         );
       case "datePicker":
@@ -109,7 +109,7 @@ const Form = ({ formConfig }) => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label={label}
-              onChange={(e) => handleChange(e.$d, label)}
+              onChange={(e) => handleChange(e.$d, type, label)}
             />
           </LocalizationProvider>
         );
@@ -121,7 +121,9 @@ const Form = ({ formConfig }) => {
                 key={index}
                 control={<Checkbox />}
                 label={value}
-                onChange={(e) => handleChange(e.target.checked, label, value)}
+                onChange={(e) =>
+                  handleChange(e.target.checked, type, label, value)
+                }
               />
             ))}
           </>
@@ -137,7 +139,7 @@ const Form = ({ formConfig }) => {
                 }
                 sx={{ margin: 1 }}
                 onClick={(e) => {
-                  handleChange(e.target, label, value);
+                  handleChange(e.target, type, label, value);
                 }}
               >
                 {value}
