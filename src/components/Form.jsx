@@ -22,7 +22,7 @@ const Form = ({ formConfig }) => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [check, setCheck] = useState(false);
-  const [display, setDisplay] = useState(false);
+  const [isDisplay, setIsDisplay] = useState(false);
 
   const handleChange = (e, type, key, subVal = null) => {
     let value;
@@ -206,7 +206,7 @@ const Form = ({ formConfig }) => {
         break;
       }
     }
-    if (isValidForm) setDisplay(true);
+    if (isValidForm) setIsDisplay(true);
 
     setCheck(false);
   }
@@ -214,7 +214,7 @@ const Form = ({ formConfig }) => {
   useEffect(() => {
     setFormData({});
     setErrors({});
-    setDisplay(false);
+    setIsDisplay(false);
   }, [formConfig]);
 
   return (
@@ -248,7 +248,7 @@ const Form = ({ formConfig }) => {
           </Button>
         </Grid>
       </form>
-      {display && <PaperCard formData={formData} />}
+      {isDisplay && <PaperCard formData={formData} />}
     </>
   );
 };

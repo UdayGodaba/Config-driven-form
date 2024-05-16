@@ -21,7 +21,7 @@ export const forms = {
     {
       type: "textField",
       label: "Phone",
-      options: { placeHolder: "Contact Number" },
+      options: { placeHolder: "Contact Number with country code" },
       validations: {
         required: true,
         minLength: 6,
@@ -99,7 +99,7 @@ export const forms = {
     {
       type: "textField",
       label: "Phone",
-      options: { placeHolder: "Contact Number" },
+      options: { placeHolder: "Contact Number with country code" },
       validations: {
         required: true,
         minLength: 6,

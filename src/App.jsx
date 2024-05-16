@@ -22,6 +22,7 @@ function App() {
       sx={{
         padding: 5,
         maxWidth: 750,
+        margin: {md: "auto"}
       }}
     >
       <Grid item xs={12}>
